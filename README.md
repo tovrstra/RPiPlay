@@ -58,18 +58,64 @@ GCC 5 or later is required.
 
 # Building on desktop Linux:
 
-For building on Ubuntu 18.04 or 20.04, follow these steps:
+To install dependencies on Ubuntu 18.04 or 20.04, run:
 ```bash
-sudo apt-get install cmake libavahi-compat-libdnssd-dev libplist-dev libssl-dev \
-    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-libav \
-    gstreamer1.0-vaapi gstreamer1.0-plugins-bad
+sudo apt-get install \
+    build-essential \
+    avahi-daemon \
+    cmake \
+    libavahi-compat-libdnssd-dev \
+    libplist-dev \
+    libssl-dev \
+    libgstreamer1.0-dev \
+    libgstreamer-plugins-base1.0-dev \
+    gstreamer1.0-libav \
+    gstreamer1.0-vaapi \
+    gstreamer1.0-plugins-bad
+```
+
+To install dependencies on Fedora 32, run:
+```bash
+sudo dnf group install "C Development Tools and Libraries"
+sudo dnf install \
+    cmake \
+    avahi \
+    avahi-compat-libdns_sd-devel \
+    libplist-devel \
+    openssl-devel \
+    gstreamer1-devel \
+    gstreamer1-plugins-base-devel \
+    gstreamer1-libav \
+    gstreamer1-vaapi \
+    gstreamer1-plugins-bad-free
+```
+
+Download the source code and take the following steps to compile it:
+```bash
 mkdir build
 cd build
 cmake ..
 make
 ```
 
-Note: The -b, -r, -l, and -a options are not supported with the gstreamer renderer.
+Prior to using `rpiplay`, you need to ensure that the Avahi daemon is running.
+If not `rpiplay` will not be detected by your mobile device as an AirPlay server,
+neither will `rpiplay` notify you that the daemon should be started first.
+(Some Linux distributions enable this daemon by default.) You can verify that
+the Avahi daemon is running as follows:
+
+```bash
+systemctl status avahi-daemon.service
+```
+
+When the status is not `active (running)`, enable and start the daemon as
+follows (persistent through reboots):
+
+```bash
+sudo systemctl enable --now avahi-daemon.service
+```
+
+Note: The `-b`, `-l`, and `-a` options are not supported with the gstreamer renderer.
 
 # Usage
 
